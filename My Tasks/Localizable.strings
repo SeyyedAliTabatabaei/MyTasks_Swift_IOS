@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  My Tasks
+
+  Created by Seyyed Ali Tabatabaei on 5/9/23.
+  
+*/
+
+
+"app_name" = "My Tasks";
+"add_task" = "ADD TASK";
+"edit_task" = "EDIT TASK";
+"new_task" = "NEW TASK";
+
+"high" = "High";
+"medium" = "Medium";
+"little" = "Little";
+
+"importance" = "Importance";
+"title" = "Title";
+"description" = "Description";
+
+"search" = "Search";
+"list_empty" = "Your task list is empty";
+"add_new_task" = "Please add new task :))";

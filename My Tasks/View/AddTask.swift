@@ -7,6 +7,8 @@
 
 import Foundation
 import SwiftUI
+import UserNotifications
+
 
 struct Importance{
     let id = UUID()
@@ -23,7 +25,7 @@ enum ImportanceLevel : String {
 
 struct AddTask: View {
     
-    var addTask : (_ title : String , _ description : String , _ importance : String) -> Void
+    var addTask : (_ title : String , _ description : String , _ importance : String , _ reminder : Date?) -> Void
     @Binding var showAddTask : Bool
     
     @State private var title : String = ""
@@ -33,17 +35,22 @@ struct AddTask: View {
         Importance(color: .green ,isChecked: true , level: .MEDIUM) ,
         Importance(color: .blue , level: .LITTLE)
     ]
-    @State private var buttonSaveText : String = String.add_task
+    @State private var timePicker : Date
     
-    init(showAddTask : Binding<Bool> , task : Task? , addTask : @escaping (_ title : String , _ description : String , _ importance : String) -> Void ) {
-        
+    @State private var buttonSaveText : String = String.add_task
+    @State private var showTimePicker : Bool = false
+    @State private var showBottomSheetPermission : Bool = false
+
+    init(showAddTask : Binding<Bool> , task : Task? , addTask : @escaping (_ title : String , _ description : String , _ importance : String , _ reminder : Date?) -> Void ) {
         
         self.addTask = addTask
         self._showAddTask = Binding(projectedValue: showAddTask)
         if let task = task {
+            self._showTimePicker = State(initialValue: task.reminder == nil ? false : true)
             self._buttonSaveText = State(initialValue: String.edit_task)
             self._title = State(initialValue: task.title ?? "")
             self._descriptionTask = State(initialValue: task.description_task ?? "" )
+            self._timePicker = State(initialValue: task.reminder ?? Date.now)
             self._listImportance = State(initialValue: [
                 Importance(color: .red , isChecked: task.importance == ImportanceLevel.HIGH.rawValue ? true : false , level: .HIGH) ,
                 Importance(color: .green , isChecked: task.importance == ImportanceLevel.MEDIUM.rawValue ? true : false , level: .MEDIUM) ,
@@ -51,6 +58,7 @@ struct AddTask: View {
             ])
         }
         else {
+            self._timePicker = State(initialValue: Date.now)
             self._listImportance = State(initialValue: [
                 Importance(color: .red , level: .HIGH) ,
                 Importance(color: .green ,isChecked: true , level: .MEDIUM) ,
@@ -66,9 +74,16 @@ struct AddTask: View {
                 importanceSec
                 titleSec
                 descriptionSec
+                alarmSec
             }
             buttonSave
             Spacer()
+        }
+        .sheet(isPresented: $showBottomSheetPermission) {
+            BottomSheetSettingsPermission(showBottomSheet: $showBottomSheetPermission)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(30)
         }
     }
     
@@ -124,11 +139,41 @@ struct AddTask: View {
         }
     }
     
+    var alarmSec : some View{
+        Section(header : Text(String.alarm)) {
+            VStack{
+                Toggle(String.alarm, isOn: $showTimePicker)
+                    
+                
+                if showTimePicker{
+                    VStack{
+                        Divider()
+                        DatePicker(String.select_date , selection: $timePicker, displayedComponents: .date)
+                        DatePicker(String.select_time , selection: $timePicker, displayedComponents: .hourAndMinute)
+                    }.onAppear{
+                        notificationPermission()
+                    }
+                }
+            }
+        }
+    }
+
+    private func notificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+            if success {
+                print("All set!")
+            } else {
+                showTimePicker = false
+                showBottomSheetPermission = true
+                print("error")
+            }
+        }
+    }
     
     var buttonSave : some View {
         @State var showAlertTitle : Bool = false
         return Button {
-            addTask(title , descriptionTask , getImportance())
+            addTask(title , descriptionTask , getImportance() , showTimePicker ? timePicker : nil)
             showAddTask  = false
         } label: {
             RoundedRectangle(cornerRadius: 10)
@@ -157,7 +202,7 @@ struct AddTask: View {
 struct AddTask_Previews: PreviewProvider {
 
     static var previews: some View {
-        AddTask(showAddTask: .constant(true) , task:  nil) { title, description, importance in
+        AddTask(showAddTask: .constant(true) , task:  nil) { title, description, importance , reminder in
             
         }
 

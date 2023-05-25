@@ -28,8 +28,8 @@ struct ContentView: View {
                                 vm.isDoneTask(at: t)
                             } , deleteTask: {
                                 withAnimation { vm.deleteTask(at: t) }
-                            } , updateTask: { title, description, importance in
-                                vm.updateTask(at: t, title: title, description: description, importance: importance)
+                            } , updateTask: { title, description, importance , reminder in
+                                vm.updateTask(at: t, title: title, description: description, importance: importance , reminder : reminder)
                             }, isDone: t.done)
                         }
                         
@@ -70,9 +70,11 @@ struct ContentView: View {
                 }
         }
     }
-
+    
+    
     var buttonNewTask : some View {
         Button {
+            
             showAddTask.toggle()
         } label: {
             RoundedRectangle(cornerRadius: 10)
@@ -86,8 +88,8 @@ struct ContentView: View {
         }
         .padding(.horizontal)
         .popover(isPresented: $showAddTask) {
-            AddTask(showAddTask: $showAddTask , task: nil) { title, description, importance in
-                vm.addTask(title: title, description: description , importance: importance)
+            AddTask(showAddTask: $showAddTask , task: nil) { title, description, importance , reminder in
+                vm.addTask(title: title, description: description , importance: importance , reminder: reminder)
             }
             .wrappedNavigationViewToMakeDismissable { showAddTask = false }
         }
@@ -99,7 +101,7 @@ struct CardView : View{
     var task : Task
     var isDoneTask : () -> Void
     var deleteTask : () -> Void
-    var updateTask : (_ title : String , _ description : String , _ importance : String) -> Void
+    var updateTask : (_ title : String , _ description : String , _ importance : String , _ reminder : Date?) -> Void
     @State var isDone : Bool
     @State private var showUpdateTask : Bool = false
     @Environment(\.colorScheme) var colorSchema

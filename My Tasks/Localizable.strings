@@ -23,3 +23,10 @@
 "search" = "Search";
 "list_empty" = "Your task list is empty";
 "add_new_task" = "Please add new task :))";
+
+"alarm" = "Reminder";
+"select_date" = "Select Date";
+"select_time" = "Select Time";
+
+"go_settings" = "Go To Settings";
+"cancel" = "Cancel";

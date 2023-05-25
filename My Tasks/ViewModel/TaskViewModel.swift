@@ -26,13 +26,14 @@ class TaskViewModel : ObservableObject{
         }
     }
     
-    func addTask(title : String , description : String , importance : String){
+    func addTask(title : String , description : String , importance : String , reminder : Date?){
         let task = Task(context: viewContext)
         task.id = (getLastID() + 1)
         task.title = title
         task.done = false
         task.importance = importance
         task.description_task = description
+        task.reminder = reminder
         
         save()
     }
@@ -42,11 +43,12 @@ class TaskViewModel : ObservableObject{
         save()
     }
     
-    func updateTask(at task : Task? , title : String , description : String , importance : String){
+    func updateTask(at task : Task? , title : String , description : String , importance : String , reminder : Date?){
         if let task = task{
             task.title = title
             task.description_task = description
             task.importance = importance
+            task.reminder = reminder
             
             save()
         }

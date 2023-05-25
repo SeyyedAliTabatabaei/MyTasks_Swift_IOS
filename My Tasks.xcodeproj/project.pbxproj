@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		631395292A1F75050015E2DE /* BottomSheetSettingsPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631395282A1F75050015E2DE /* BottomSheetSettingsPermission.swift */; };
 		631C5A7D2A0ADC30008A4D01 /* My_TasksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C5A7C2A0ADC30008A4D01 /* My_TasksApp.swift */; };
 		631C5A7F2A0ADC30008A4D01 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C5A7E2A0ADC30008A4D01 /* ContentView.swift */; };
 		631C5A812A0ADC31008A4D01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 631C5A802A0ADC31008A4D01 /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		631395282A1F75050015E2DE /* BottomSheetSettingsPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetSettingsPermission.swift; sourceTree = "<group>"; };
 		631C5A792A0ADC30008A4D01 /* My Tasks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Tasks.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		631C5A7C2A0ADC30008A4D01 /* My_TasksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_TasksApp.swift; sourceTree = "<group>"; };
 		631C5A7E2A0ADC30008A4D01 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			children = (
 				631C5A7E2A0ADC30008A4D01 /* ContentView.swift */,
 				631C5AB22A0AE29D008A4D01 /* AddTask.swift */,
+				631395282A1F75050015E2DE /* BottomSheetSettingsPermission.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -257,6 +260,9 @@
 				Base,
 			);
 			mainGroup = 631C5A702A0ADC30008A4D01;
+			packageReferences = (
+				63A524C12A1FAD3F002C0EF8 /* XCRemoteSwiftPackageReference "LottieUI" */,
+			);
 			productRefGroup = 631C5A7A2A0ADC30008A4D01 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -306,6 +312,7 @@
 				631C5AB32A0AE29D008A4D01 /* AddTask.swift in Sources */,
 				631C5AAB2A0ADE22008A4D01 /* Tasks.xcdatamodeld in Sources */,
 				631C5AB12A0AE1E7008A4D01 /* TaskViewModel.swift in Sources */,
+				631395292A1F75050015E2DE /* BottomSheetSettingsPermission.swift in Sources */,
 				631C5AAD2A0ADE9C008A4D01 /* PersistenceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -631,6 +638,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		63A524C12A1FAD3F002C0EF8 /* XCRemoteSwiftPackageReference "LottieUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jasudev/LottieUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCVersionGroup section */
 		631C5AA92A0ADE22008A4D01 /* Tasks.xcdatamodeld */ = {

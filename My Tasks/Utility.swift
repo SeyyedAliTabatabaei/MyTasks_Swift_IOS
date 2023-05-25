@@ -56,6 +56,11 @@ extension String{
     static let search = String(localized: "search")
     static let list_empty = String(localized: "list_empty")
     static let add_new_task = String(localized: "add_new_task")
+    static let alarm = String(localized: "alarm")
+    static let select_date = String(localized: "select_date")
+    static let select_time = String(localized: "select_time")
+    static let go_settings = String(localized: "go_settings")
+    static let cancel = String(localized: "cancel")
 }
 
 

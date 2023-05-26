@@ -32,7 +32,6 @@ struct ContentView: View {
                                 vm.updateTask(at: t, title: title, description: description, importance: importance , reminder : reminder)
                             }, isDone: t.done)
                         }
-                        
                     }
                     .searchable(text: $searchTask , prompt: String.search)
                 }
@@ -74,7 +73,6 @@ struct ContentView: View {
     
     var buttonNewTask : some View {
         Button {
-            
             showAddTask.toggle()
         } label: {
             RoundedRectangle(cornerRadius: 10)
@@ -157,6 +155,9 @@ struct CardView : View{
 
         }
     }
+    
+    
+    
     
     private func getColorImportance(_ imp : String) -> Color {
         switch imp{

@@ -30,3 +30,5 @@
 
 "go_settings" = "Go To Settings";
 "cancel" = "Cancel";
+"turn_on_notification" = "Turn On Notifications";
+"turn_on_notification_des" = "We need notifications permission to show alarm notifications.";

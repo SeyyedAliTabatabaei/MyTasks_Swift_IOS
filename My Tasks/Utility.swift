@@ -61,6 +61,8 @@ extension String{
     static let select_time = String(localized: "select_time")
     static let go_settings = String(localized: "go_settings")
     static let cancel = String(localized: "cancel")
+    static let turn_on_notification = String(localized: "turn_on_notification")
+    static let turn_on_notification_des = String(localized: "turn_on_notification_des")
 }
 
 

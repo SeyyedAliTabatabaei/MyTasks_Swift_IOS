@@ -161,11 +161,10 @@ struct AddTask: View {
     private func notificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
             if success {
-                print("All set!")
+                showTimePicker = true
             } else {
                 showTimePicker = false
                 showBottomSheetPermission = true
-                print("error")
             }
         }
     }

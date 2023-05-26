@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import UserNotifications
 
 class TaskViewModel : ObservableObject{
     private let viewContext = PersistenceController.shared.viewContext
@@ -35,10 +36,17 @@ class TaskViewModel : ObservableObject{
         task.description_task = description
         task.reminder = reminder
         
+        if let r = reminder{
+            setNotification(task: task)
+        }else{
+            cancelNotification(task: task)
+        }
+        
         save()
     }
     
     func deleteTask(at task : Task){
+        cancelNotification(task: task)
         viewContext.delete(task)
         save()
     }
@@ -49,6 +57,11 @@ class TaskViewModel : ObservableObject{
             task.description_task = description
             task.importance = importance
             task.reminder = reminder
+            if let r = reminder{
+                setNotification(task: task)
+            }else{
+                cancelNotification(task: task)
+            }
             
             save()
         }
@@ -66,6 +79,29 @@ class TaskViewModel : ObservableObject{
         } catch {
             print("Error saving")
         }
+    }
+    
+    private func setNotification(task : Task){
+        if let reminder = task.reminder{
+            let content = UNMutableNotificationContent()
+            content.title = "Your Task Reminder"
+            content.subtitle = task.title ?? ""
+            if let des = task.description_task{
+                content.body = des
+            }
+            content.sound = UNNotificationSound.default
+                
+            var dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: reminder)
+                
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let request = UNNotificationRequest(identifier: String(task.id), content: content, trigger: trigger)
+                
+            UNUserNotificationCenter.current().add(request)
+        }
+    }
+    
+    private func cancelNotification(task : Task){
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [String(task.id)])
     }
     
     

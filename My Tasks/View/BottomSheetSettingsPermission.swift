@@ -18,13 +18,13 @@ struct BottomSheetSettingsPermission: View {
                 .frame(width: 80 , height: 100)
                 .foregroundColor(.red)
             
-            Text("Turn On Notifications")
+            Text(String.turn_on_notification)
                 .bold()
                 .foregroundColor(.red)
                 .padding(.top , 50)
                 .padding(.bottom , 10)
             
-            Text("We need notifications permission to show alarm notifications.")
+            Text(String.turn_on_notification_des)
             Spacer()
             
             Button {
@@ -62,6 +62,7 @@ struct BottomSheetSettingsPermission: View {
         
         if UIApplication.shared.canOpenURL(settingsURL){
             UIApplication.shared.open(settingsURL , options: [:] , completionHandler: nil)
+            showBottomSheet = false
         }
     }
 }

@@ -40,6 +40,7 @@ struct AddTask: View {
     @State private var buttonSaveText : String = String.add_task
     @State private var showTimePicker : Bool = false
     @State private var showBottomSheetPermission : Bool = false
+    var appSettings = MyAppSetting.shared
 
     init(showAddTask : Binding<Bool> , task : Task? , addTask : @escaping (_ title : String , _ description : String , _ importance : String , _ reminder : Date?) -> Void ) {
         
@@ -176,8 +177,9 @@ struct AddTask: View {
             showAddTask  = false
         } label: {
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color.colorPrimary)
+                .fill()
                 .frame(maxHeight: 50)
+                .foregroundColor(colorPrimary(theme: appSettings.themeColor))
                 .overlay {
                     Text(buttonSaveText)
                         .foregroundColor(Color.white)

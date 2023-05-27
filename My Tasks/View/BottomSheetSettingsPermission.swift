@@ -10,17 +10,18 @@ import SwiftUI
 struct BottomSheetSettingsPermission: View {
     
     @Binding var showBottomSheet : Bool
-    
+    var appSettings = MyAppSetting.shared
+
     var body: some View {
         VStack{
             Image(systemName: "bell.badge.fill")
                 .resizable()
                 .frame(width: 80 , height: 100)
-                .foregroundColor(.red)
+                .foregroundColor(colorPrimary(theme: appSettings.themeColor))
             
             Text(String.turn_on_notification)
                 .bold()
-                .foregroundColor(.red)
+                .foregroundColor(colorPrimary(theme: appSettings.themeColor))
                 .padding(.top , 50)
                 .padding(.bottom , 10)
             
@@ -31,7 +32,7 @@ struct BottomSheetSettingsPermission: View {
                 openNotificationSettings()
             } label: {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.colorPrimary)
+                    .fill(colorPrimary(theme: appSettings.themeColor))
                     .frame(maxHeight: 50)
                     .overlay {
                         Text(String.go_settings)
@@ -45,7 +46,7 @@ struct BottomSheetSettingsPermission: View {
                 showBottomSheet = false
             } label: {
                 Text(String.cancel)
-                    .foregroundColor(Color.red)
+                    .foregroundColor(colorPrimary(theme: appSettings.themeColor))
             }
             .padding()
             

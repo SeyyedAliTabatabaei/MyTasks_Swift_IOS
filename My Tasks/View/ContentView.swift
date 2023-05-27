@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var task : Task?
     @State private var searchTask : String = ""
     @Environment(\.colorScheme) var colorSchema
+    @ObservedObject var appSettings = MyAppSetting.shared
 
     var body: some View {
         NavigationView {
@@ -39,6 +40,83 @@ struct ContentView: View {
                 buttonNewTask
             }
             .navigationTitle(String.app_name)
+            .toolbar {
+                Menu {
+                    Menu { menuSort } label: {
+                        Label(String.sort_by, systemImage: "arrow.up.arrow.down")
+                    }
+                    
+                    Menu { menuColorTheme } label: {
+                        Label(String.theme_color, systemImage: "paintbrush")
+                    }
+
+                } label: {
+                    Label("Options", systemImage: "ellipsis.circle")
+                        .foregroundColor(colorPrimary(theme: appSettings.themeColor))
+
+                }
+            }
+        }
+    }
+    
+    var menuSort : some View {
+        VStack{
+            Menu(String.date_added) {
+                
+                ButtonMenu(title: String.newest_first , isChecked : appSettings.getSorted() == SortedBy.DATE_ADDED_NEWEST.rawValue) {
+                    vm.sortDateAddedNewest()
+                    appSettings.setSorted(new: SortedBy.DATE_ADDED_NEWEST.rawValue)
+                }
+                
+                ButtonMenu(title: String.oldest_first , isChecked : appSettings.getSorted() == SortedBy.DATE_ADDED_OLDEST.rawValue) {
+                    vm.sortDateAddedOldest()
+                    appSettings.setSorted(new: SortedBy.DATE_ADDED_OLDEST.rawValue)
+                }
+            }
+            
+            Menu(String.title) {
+                ButtonMenu(title: String.a_to_z , isChecked : appSettings.getSorted() == SortedBy.TITLE_A_TO_Z.rawValue) {
+                    vm.sortTitleAToZ()
+                    appSettings.setSorted(new: SortedBy.TITLE_A_TO_Z.rawValue)
+                }
+                
+                ButtonMenu(title: String.z_to_a , isChecked : appSettings.getSorted() == SortedBy.TITLE_Z_TO_A.rawValue) {
+                    vm.sortTitleZToA()
+                    appSettings.setSorted(new: SortedBy.TITLE_Z_TO_A.rawValue)
+                }
+            }
+        }
+    }
+    
+    var menuColorTheme : some View {
+        VStack{
+            ButtonMenu(title: ThemeColor.RED.rawValue, isChecked: appSettings.themeColor == ThemeColor.RED) {
+                appSettings.setThemeColor(new: ThemeColor.RED)
+            }
+            
+            ButtonMenu(title: ThemeColor.BLUE.rawValue, isChecked: appSettings.themeColor == ThemeColor.BLUE) {
+                appSettings.setThemeColor(new: ThemeColor.BLUE)
+            }
+            
+            ButtonMenu(title: ThemeColor.BROWN.rawValue, isChecked: appSettings.themeColor == ThemeColor.BROWN) {
+                appSettings.setThemeColor(new: ThemeColor.BROWN)
+            }
+            
+            ButtonMenu(title: ThemeColor.GREEN.rawValue, isChecked: appSettings.themeColor == ThemeColor.GREEN) {
+                appSettings.setThemeColor(new: ThemeColor.GREEN)
+            }
+            
+            ButtonMenu(title: ThemeColor.ORANGE.rawValue, isChecked: appSettings.themeColor == ThemeColor.ORANGE) {
+                appSettings.setThemeColor(new: ThemeColor.ORANGE)
+            }
+            
+            ButtonMenu(title: ThemeColor.PURPLE.rawValue, isChecked: appSettings.themeColor == ThemeColor.PURPLE) {
+                appSettings.setThemeColor(new: ThemeColor.PURPLE)
+            }
+            
+            ButtonMenu(title: ThemeColor.YELLOW.rawValue, isChecked: appSettings.themeColor == ThemeColor.YELLOW) {
+                appSettings.setThemeColor(new: ThemeColor.YELLOW)
+            }
         }
     }
     
@@ -76,7 +154,7 @@ struct ContentView: View {
             showAddTask.toggle()
         } label: {
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color.colorPrimary)
+                .fill(colorPrimary(theme: appSettings.themeColor))
                 .frame(maxHeight: 50)
                 .overlay {
                     Text(String.new_task)

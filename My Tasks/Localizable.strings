@@ -32,3 +32,11 @@
 "cancel" = "Cancel";
 "turn_on_notification" = "Turn On Notifications";
 "turn_on_notification_des" = "We need notifications permission to show alarm notifications.";
+"sort_by" = "Sort By";
+"date_added" = "Date Added";
+"newest_first" = "Newest First";
+"oldest_first" = "Oldest First";
+"a_to_z" = "A to Z";
+"z_to_a" = "Z to A";
+"z_to_a" = "Z to A";
+"theme_color" = "Theme Color";

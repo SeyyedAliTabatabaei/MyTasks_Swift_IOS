@@ -63,10 +63,53 @@ extension String{
     static let cancel = String(localized: "cancel")
     static let turn_on_notification = String(localized: "turn_on_notification")
     static let turn_on_notification_des = String(localized: "turn_on_notification_des")
+    static let sort_by = String(localized: "sort_by")
+    static let date_added = String(localized: "date_added")
+    static let newest_first = String(localized: "newest_first")
+    static let oldest_first = String(localized: "oldest_first")
+    static let a_to_z = String(localized: "a_to_z")
+    static let z_to_a = String(localized: "z_to_a")
+    static let theme_color = String(localized: "theme_color")
 }
 
 
-extension Color{
-    static let colorPrimary = Color(.red)
+func colorPrimary(theme color : ThemeColor) -> Color {
+    switch(color){
+    case ThemeColor.RED :
+        return .red
+    case ThemeColor.BLUE :
+        return .blue
+    case ThemeColor.BROWN :
+        return .brown
+    case ThemeColor.GREEN :
+        return .green
+    case ThemeColor.ORANGE :
+        return .orange
+    case ThemeColor.PURPLE :
+        return .purple
+    case ThemeColor.YELLOW :
+        return .yellow
+    }
+}
+
+struct ButtonMenu : View{
+    
+    var title : String
+    var isChecked : Bool
+    var action : () -> Void
+
+    var body: some View{
+    
+        Button {
+            action()
+        } label: {
+            HStack{
+                if (isChecked){
+                    Image(systemName: "checkmark")
+                }
+                Text(title)
+            }
+        }
+    }
 }
 

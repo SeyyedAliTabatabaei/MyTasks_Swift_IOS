@@ -12,7 +12,8 @@ import UserNotifications
 class TaskViewModel : ObservableObject{
     private let viewContext = PersistenceController.shared.viewContext
     @Published var listTasks : [Task] = []
-    
+    var appSettings = MyAppSetting.shared
+
     init() {
         getAllTasks()
     }
@@ -22,6 +23,19 @@ class TaskViewModel : ObservableObject{
 
         do{
             listTasks = try viewContext.fetch(request).reversed()
+            
+            switch(appSettings.getSorted()){
+            case SortedBy.DATE_ADDED_NEWEST.rawValue :
+                sortDateAddedNewest()
+            case SortedBy.DATE_ADDED_OLDEST.rawValue :
+                sortDateAddedOldest()
+            case SortedBy.TITLE_A_TO_Z.rawValue :
+                sortTitleAToZ()
+            case SortedBy.TITLE_Z_TO_A.rawValue :
+                sortTitleZToA()
+            default:
+                sortDateAddedNewest()
+            }
         }catch{
             print("DEBUG: Some error occured while fetching")
         }
@@ -35,13 +49,13 @@ class TaskViewModel : ObservableObject{
         task.importance = importance
         task.description_task = description
         task.reminder = reminder
-        
-        if let r = reminder{
+
+        if reminder != nil{
             setNotification(task: task)
         }else{
             cancelNotification(task: task)
         }
-        
+
         save()
     }
     
@@ -57,7 +71,7 @@ class TaskViewModel : ObservableObject{
             task.description_task = description
             task.importance = importance
             task.reminder = reminder
-            if let r = reminder{
+            if reminder != nil{
                 setNotification(task: task)
             }else{
                 cancelNotification(task: task)
@@ -91,7 +105,7 @@ class TaskViewModel : ObservableObject{
             }
             content.sound = UNNotificationSound.default
                 
-            var dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: reminder)
+            let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: reminder)
                 
             let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
             let request = UNNotificationRequest(identifier: String(task.id), content: content, trigger: trigger)
@@ -106,6 +120,25 @@ class TaskViewModel : ObservableObject{
     
     
     private func getLastID() -> Int64{
-        return listTasks.last?.id ?? 0
+        return listTasks.max { t0, t1 in
+            t0.id < t1.id
+        }?.id ?? 0
+    }
+    
+    
+    func sortDateAddedNewest(){
+        listTasks.sort { $0.id > $1.id}
+    }
+    
+    func sortDateAddedOldest(){
+        listTasks.sort { $0.id < $1.id}
+    }
+    
+    func sortTitleAToZ(){
+        listTasks.sort { $0.title ?? "" < $1.title ?? ""}
+    }
+    
+    func sortTitleZToA(){
+        listTasks.sort { $0.title ?? "" > $1.title ?? ""}
     }
 }

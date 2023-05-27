@@ -14,6 +14,9 @@ struct ContentView: View {
     @State private var searchTask : String = ""
     @Environment(\.colorScheme) var colorSchema
     @ObservedObject var appSettings = MyAppSetting.shared
+    
+    @State private var selectItems = Set<Task>()
+    @State private var enableSelection : Bool = false
 
     var body: some View {
         NavigationView {
@@ -23,7 +26,7 @@ struct ContentView: View {
                     emptyList
                     Spacer()
                 } else {
-                    List{
+                    List(selection : $selectItems){
                         ForEach(searchResult , id: \.id) { t in
                             CardView(task: t, isDoneTask: {
                                 vm.isDoneTask(at: t)
@@ -31,34 +34,59 @@ struct ContentView: View {
                                 withAnimation { vm.deleteTask(at: t) }
                             } , updateTask: { title, description, importance , reminder in
                                 vm.updateTask(at: t, title: title, description: description, importance: importance , reminder : reminder)
-                            }, isDone: t.done)
+                            } ,selectTask: {
+                                if selectItems.contains(t){
+                                    selectItems.remove(t)
+                                } else {
+                                    selectItems.insert(t)
+                                }
+                            
+                            } , isDone: t.done , enableSelection : enableSelection , isItemSelect : selectItems.contains(t))
                         }
                     }
+                    
                     .searchable(text: $searchTask , prompt: String.search)
                 }
                 
-                buttonNewTask
+                if enableSelection{ selectionMenu }
+                else{ buttonNewTask }
             }
             .navigationTitle(String.app_name)
             .toolbar {
-                Menu {
-                    Menu { menuSort } label: {
-                        Label(String.sort_by, systemImage: "arrow.up.arrow.down")
-                    }
-                    
-                    Menu { menuColorTheme } label: {
-                        Label(String.theme_color, systemImage: "paintbrush")
-                    }
-
-                } label: {
-                    Label("Options", systemImage: "ellipsis.circle")
-                        .foregroundColor(colorPrimary(theme: appSettings.themeColor))
-
+                if !enableSelection{  menu }
+                else {
+                    Button(String.cancel) {
+                        withAnimation { enableSelection.toggle() }
+                        selectItems.removeAll()
+                    }.foregroundColor(colorPrimary(theme: appSettings.themeColor))
                 }
             }
         }
     }
     
+    var menu : some View {
+        Menu {
+
+            Button {
+                withAnimation { enableSelection.toggle() }
+            } label: {
+                Label(String.select_task , systemImage: "checklist")
+            }
+            
+            Menu { menuSort } label: {
+                Label(String.sort_by, systemImage: "arrow.up.arrow.down")
+            }
+            
+            Menu { menuColorTheme } label: {
+                Label(String.theme_color, systemImage: "paintbrush")
+            }
+
+        } label: {
+            Label("Options", systemImage: "ellipsis.circle")
+                .foregroundColor(colorPrimary(theme: appSettings.themeColor))
+
+        }
+    }
     var menuSort : some View {
         VStack{
             Menu(String.date_added) {
@@ -170,6 +198,24 @@ struct ContentView: View {
             .wrappedNavigationViewToMakeDismissable { showAddTask = false }
         }
     }
+    
+    var selectionMenu : some View {
+        HStack{
+            Spacer()
+            Text("\(selectItems.count) Task selected")
+            Spacer()
+            Button {
+                
+            } label: {
+                Image(systemName: "trash")
+                    .resizable()
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(height: 25)
+            }
+        }
+        .foregroundColor(colorPrimary(theme: appSettings.themeColor))
+        .padding()
+    }
 }
 
 struct CardView : View{
@@ -178,35 +224,51 @@ struct CardView : View{
     var isDoneTask : () -> Void
     var deleteTask : () -> Void
     var updateTask : (_ title : String , _ description : String , _ importance : String , _ reminder : Date?) -> Void
+    var selectTask : () -> Void
     @State var isDone : Bool
     @State private var showUpdateTask : Bool = false
     @Environment(\.colorScheme) var colorSchema
+    var enableSelection : Bool
+    var isItemSelect : Bool
+    var appSetting = MyAppSetting.shared
     
     var body: some View{
         HStack {
+            
+            if enableSelection{
+                Image(systemName: isItemSelect ? "checkmark.circle.fill" : "circle" )
+                    .resizable()
+                    .aspectRatio(1/1 , contentMode: .fit)
+                    .frame(height: 25)
+                    .foregroundColor(colorPrimary(theme: appSetting.themeColor))
+                    .onTapGesture {
+                        selectTask()
+                    }
+            }
+            
             VStack(alignment: .leading){
                 Text(task.title ?? "")
                     .bold()
                     .font(Font.title2)
-                
                 Text(task.description_task ?? "")
             }
             
             Spacer()
-            
-            RoundedRectangle(cornerRadius: 5)
-                .frame(width: 30 , height: 30)
-                .foregroundColor(getColorImportance(task.importance ?? String.medium))
-                .overlay {
-                    if isDone { Image(systemName: "checkmark")
-                            .foregroundColor(.white)
-                            .bold()
+            if !enableSelection{
+                RoundedRectangle(cornerRadius: 5)
+                    .frame(width: 30 , height: 30)
+                    .foregroundColor(getColorImportance(task.importance ?? String.medium))
+                    .overlay {
+                        if isDone { Image(systemName: "checkmark")
+                                .foregroundColor(.white)
+                                .bold()
+                        }
+                        
+                    }.onTapGesture {
+                        isDone.toggle()
+                        isDoneTask()
                     }
-                    
-                }.onTapGesture {
-                    isDone.toggle()
-                    isDoneTask()
-                }
+            }
         }
         .swipeActions(edge : .trailing) {
             Button() {

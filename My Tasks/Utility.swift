@@ -70,6 +70,7 @@ extension String{
     static let a_to_z = String(localized: "a_to_z")
     static let z_to_a = String(localized: "z_to_a")
     static let theme_color = String(localized: "theme_color")
+    static let select_task = String(localized: "select_task")
 }
 
 

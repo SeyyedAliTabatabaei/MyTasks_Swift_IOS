@@ -84,7 +84,6 @@ struct ManageTask: View {
             BottomSheetSettingsPermission(showBottomSheet: $showBottomSheetPermission)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
-                .presentationCornerRadius(30)
         }
     }
     

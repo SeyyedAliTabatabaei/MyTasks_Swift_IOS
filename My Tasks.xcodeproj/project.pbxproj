@@ -111,7 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				631C5AA72A0ADDBF008A4D01 /* ViewModel */,
-				631C5AA62A0ADDAB008A4D01 /* CoreData */,
+				631C5AA62A0ADDAB008A4D01 /* Model */,
 				631C5AA82A0ADDC6008A4D01 /* View */,
 				631C5A7C2A0ADC30008A4D01 /* My_TasksApp.swift */,
 				631C5AB42A0AE2CD008A4D01 /* Localizable.strings */,
@@ -147,14 +147,14 @@
 			path = "My TasksUITests";
 			sourceTree = "<group>";
 		};
-		631C5AA62A0ADDAB008A4D01 /* CoreData */ = {
+		631C5AA62A0ADDAB008A4D01 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				631C5AA92A0ADE22008A4D01 /* Tasks.xcdatamodeld */,
 				631C5AAC2A0ADE9C008A4D01 /* PersistenceController.swift */,
 				63BFBF4E2A21D91B00FDFD72 /* UserDefults.swift */,
 			);
-			path = CoreData;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		631C5AA72A0ADDBF008A4D01 /* ViewModel */ = {

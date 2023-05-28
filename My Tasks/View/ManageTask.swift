@@ -23,7 +23,7 @@ enum ImportanceLevel : String {
     case LITTLE = "Little"
 }
 
-struct AddTask: View {
+struct ManageTask: View {
     
     var addTask : (_ title : String , _ description : String , _ importance : String , _ reminder : Date?) -> Void
     @Binding var showAddTask : Bool
@@ -203,7 +203,7 @@ struct AddTask: View {
 struct AddTask_Previews: PreviewProvider {
 
     static var previews: some View {
-        AddTask(showAddTask: .constant(true) , task:  nil) { title, description, importance , reminder in
+        ManageTask(showAddTask: .constant(true) , task:  nil) { title, description, importance , reminder in
             
         }
 

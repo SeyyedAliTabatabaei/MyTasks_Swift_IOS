@@ -204,7 +204,7 @@ struct ContentView: View {
         }
         .padding(.horizontal)
         .popover(isPresented: $showAddTask) {
-            AddTask(showAddTask: $showAddTask , task: nil) { title, description, importance , reminder in
+            ManageTask(showAddTask: $showAddTask , task: nil) { title, description, importance , reminder in
                 vm.addTask(title: title, description: description , importance: importance , reminder: reminder)
             }
             .wrappedNavigationViewToMakeDismissable { showAddTask = false }
@@ -319,7 +319,7 @@ struct CardView : View{
             }
         }
         .popover(isPresented: $showUpdateTask) {
-            AddTask(showAddTask: $showUpdateTask, task: task , addTask: updateTask)
+            ManageTask(showAddTask: $showUpdateTask, task: task , addTask: updateTask)
                 .wrappedNavigationViewToMakeDismissable { showUpdateTask = false }
             
         }

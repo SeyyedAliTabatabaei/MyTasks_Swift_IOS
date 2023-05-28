@@ -26,7 +26,7 @@ struct ContentView: View {
                     emptyList
                     Spacer()
                 } else {
-                    List(selection : $selectItems){
+                    List{
                         ForEach(searchResult , id: \.id) { t in
                             CardView(task: t, isDoneTask: {
                                 vm.isDoneTask(at: t)
@@ -71,7 +71,7 @@ struct ContentView: View {
                 withAnimation { enableSelection.toggle() }
             } label: {
                 Label(String.select_task , systemImage: "checklist")
-            }
+            }.disabled(vm.listTasks.isEmpty ? true : false)
             
             Menu { menuSort } label: {
                 Label(String.sort_by, systemImage: "arrow.up.arrow.down")
@@ -111,6 +111,18 @@ struct ContentView: View {
                 ButtonMenu(title: String.z_to_a , isChecked : appSettings.getSorted() == SortedBy.TITLE_Z_TO_A.rawValue) {
                     vm.sortTitleZToA()
                     appSettings.setSorted(new: SortedBy.TITLE_Z_TO_A.rawValue)
+                }
+            }
+            
+            Menu(String.importance) {
+                ButtonMenu(title: String.high_to_little , isChecked : appSettings.getSorted() == SortedBy.IMPORTANCE_H_TO_L.rawValue) {
+                    vm.sortImportanceHighToLittle()
+                    appSettings.setSorted(new: SortedBy.IMPORTANCE_H_TO_L.rawValue)
+                }
+                
+                ButtonMenu(title: String.little_to_high , isChecked : appSettings.getSorted() == SortedBy.IMPORTANCE_L_TO_H.rawValue) {
+                    vm.sortImportanceLittleToHigh()
+                    appSettings.setSorted(new: SortedBy.IMPORTANCE_L_TO_H.rawValue)
                 }
             }
         }
@@ -205,6 +217,13 @@ struct ContentView: View {
             Text("\(selectItems.count) Task selected")
             Spacer()
             Button {
+                withAnimation {
+                    enableSelection.toggle()
+                    selectItems.forEach { t in
+                        vm.deleteTask(at: t)
+                    }
+                }
+                selectItems.removeAll()
                 
             } label: {
                 Image(systemName: "trash")
@@ -233,67 +252,78 @@ struct CardView : View{
     var appSetting = MyAppSetting.shared
     
     var body: some View{
-        HStack {
-            
-            if enableSelection{
-                Image(systemName: isItemSelect ? "checkmark.circle.fill" : "circle" )
-                    .resizable()
-                    .aspectRatio(1/1 , contentMode: .fit)
-                    .frame(height: 25)
-                    .foregroundColor(colorPrimary(theme: appSetting.themeColor))
-                    .onTapGesture {
-                        selectTask()
-                    }
+        
+        Button {
+            if enableSelection {
+                withAnimation { selectTask() }
             }
-            
-            VStack(alignment: .leading){
-                Text(task.title ?? "")
-                    .bold()
-                    .font(Font.title2)
-                Text(task.description_task ?? "")
-            }
-            
-            Spacer()
-            if !enableSelection{
-                RoundedRectangle(cornerRadius: 5)
-                    .frame(width: 30 , height: 30)
-                    .foregroundColor(getColorImportance(task.importance ?? String.medium))
-                    .overlay {
-                        if isDone { Image(systemName: "checkmark")
-                                .foregroundColor(.white)
-                                .bold()
+        } label: {
+            HStack {
+                
+                if enableSelection{
+                    Image(systemName: isItemSelect ? "checkmark.circle.fill" : "circle" )
+                        .resizable()
+                        .aspectRatio(1/1 , contentMode: .fit)
+                        .frame(height: 25)
+                        .foregroundColor(colorPrimary(theme: appSetting.themeColor))
+                }
+                
+                VStack(alignment: .leading){
+                    Text(task.title ?? "")
+                        .bold()
+                        .font(Font.title2)
+                        .strikethrough(isDone)
+                    Text(task.description_task ?? "")
+                }
+                
+                Spacer()
+                if !enableSelection{
+                    RoundedRectangle(cornerRadius: 5)
+                        .frame(width: 30 , height: 30)
+                        .foregroundColor(getColorImportance(task.importance ?? String.medium))
+                        .overlay {
+                            if isDone { Image(systemName: "checkmark")
+                                    .foregroundColor(.white)
+                                    .bold()
+                            }
+                            
+                        }.onTapGesture {
+                            isDone.toggle()
+                            isDoneTask()
                         }
-                        
-                    }.onTapGesture {
-                        isDone.toggle()
-                        isDoneTask()
-                    }
+                }
+                
             }
+            
         }
         .swipeActions(edge : .trailing) {
-            Button() {
-                showUpdateTask.toggle()
-            } label: { Image(systemName: "square.and.pencil").bold() }
-            .tint(.green)
-            
-            
-            Button() {
-                deleteTask()
-            } label: { Image(systemName: "trash").bold() }
-            .tint(.red)
+            if !enableSelection{
+                Button() {
+                    showUpdateTask.toggle()
+                } label: { Image(systemName: "square.and.pencil").bold() }
+                    .tint(.green)
+                
+                Button() {
+                    deleteTask()
+                } label: { Image(systemName: "trash").bold() }
+                    .tint(.red)
+            }
         }
         .swipeActions(edge : .leading) {
-            Button() {
-                isDone.toggle()
-                isDoneTask()
-            } label: { Image(systemName: "checkmark.square").bold() }
-                .tint(.purple)
+            if !enableSelection {
+                Button() {
+                    isDone.toggle()
+                    isDoneTask()
+                } label: { Image(systemName: "checkmark.square").bold() }
+                    .tint(.purple)
+            }
         }
         .popover(isPresented: $showUpdateTask) {
             AddTask(showAddTask: $showUpdateTask, task: task , addTask: updateTask)
                 .wrappedNavigationViewToMakeDismissable { showUpdateTask = false }
-
+            
         }
+        
     }
     
     

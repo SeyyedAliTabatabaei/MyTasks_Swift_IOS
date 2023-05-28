@@ -71,6 +71,8 @@ extension String{
     static let z_to_a = String(localized: "z_to_a")
     static let theme_color = String(localized: "theme_color")
     static let select_task = String(localized: "select_task")
+    static let high_to_little = String(localized: "high_to_little")
+    static let little_to_high = String(localized: "little_to_high")
 }
 
 

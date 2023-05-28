@@ -33,6 +33,10 @@ class TaskViewModel : ObservableObject{
                 sortTitleAToZ()
             case SortedBy.TITLE_Z_TO_A.rawValue :
                 sortTitleZToA()
+            case SortedBy.IMPORTANCE_H_TO_L.rawValue :
+                sortImportanceHighToLittle()
+            case SortedBy.IMPORTANCE_L_TO_H.rawValue :
+                sortImportanceLittleToHigh()
             default:
                 sortDateAddedNewest()
             }
@@ -140,5 +144,26 @@ class TaskViewModel : ObservableObject{
     
     func sortTitleZToA(){
         listTasks.sort { $0.title ?? "" > $1.title ?? ""}
+    }
+    
+    func sortImportanceHighToLittle(){
+        listTasks.sort { getNumberImportance(importance: $0.importance ?? "") > getNumberImportance(importance: $1.importance ?? "")}
+    }
+    
+    func sortImportanceLittleToHigh(){
+        listTasks.sort { getNumberImportance(importance: $0.importance ?? "") < getNumberImportance(importance: $1.importance ?? "")}
+    }
+    
+    private func getNumberImportance(importance : String) -> Int{
+        switch(importance){
+        case ImportanceLevel.HIGH.rawValue:
+            return 2
+        case ImportanceLevel.MEDIUM.rawValue:
+            return 1
+        case ImportanceLevel.LITTLE.rawValue:
+            return 0
+        default:
+            return 1
+        }
     }
 }

@@ -38,7 +38,8 @@
 "oldest_first" = "Oldest First";
 "a_to_z" = "A to Z";
 "z_to_a" = "Z to A";
-"z_to_a" = "Z to A";
+"high_to_little" = "High to Little";
+"little_to_high" = "Little to High";
 "theme_color" = "Theme Color";
 "select_task" = "Select Task";
 "cancel" = "Cancel";

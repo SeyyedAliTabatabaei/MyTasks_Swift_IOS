@@ -63,6 +63,8 @@ enum SortedBy : String{
     case DATE_ADDED_OLDEST = "date_added_oldest"
     case TITLE_A_TO_Z = "title_a_to_z"
     case TITLE_Z_TO_A = "title_z_to_a"
+    case IMPORTANCE_H_TO_L = "importance_h_to_l"
+    case IMPORTANCE_L_TO_H = "importance_l_to_h"
 }
 
 enum ThemeColor : String{

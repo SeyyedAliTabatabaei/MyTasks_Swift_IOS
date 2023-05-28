@@ -269,10 +269,16 @@ struct CardView : View{
                 }
                 
                 VStack(alignment: .leading){
-                    Text(task.title ?? "")
-                        .bold()
-                        .font(Font.title2)
-                        .strikethrough(isDone)
+                    HStack(alignment : .top){
+                        if task.reminder != nil && !enableSelection{
+                            Image(systemName: "clock")
+                        }
+                        Text(task.title ?? "")
+                            .bold()
+                            .font(Font.title2)
+                            .strikethrough(isDone)
+                    }
+                    
                     Text(task.description_task ?? "")
                 }
                 
